@@ -8,6 +8,7 @@ on:
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   SLACK_CHANNEL: "C03LF4N5WES"
+  CLIENT-PAYLOAD: ${{ github.event.client_payload.example-key }}
 
 jobs:
   check:
