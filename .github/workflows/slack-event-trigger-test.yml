@@ -11,12 +11,23 @@ env:
   CLIENT-PAYLOAD: ${{ github.event.client_payload }}
 
 jobs:
-  check:
-    name: Run check
+  check-events:
+    name: "Check Events"
     runs-on: ubuntu-latest
+    outputs:
+      determine-event-result: ${{ steps.determine-event.outputs.result }}
     steps:
-      - name: Dump event
-        run: echo CLIENT-PAYLOAD
+      - id: determine-event
+        name: "Determine Event Type"
+        run: |
+          import os
+          payload=os.environ['CLIENT_PAYLOAD']
+          if payload.get('type', '') == 'url_verification':
+            print(f"Returning Challenge value...")
+            result="success"
+            return payload['challenge']
+          result="failed"
+        shell: python
   send-notification:
     name: "Send Slack Notification"
     runs-on: ubuntu-latest
@@ -24,7 +35,7 @@ jobs:
       - name: slack - GitHub Actions Slack integration
         uses: act10ns/slack@46098c76608e7ab2e5c784a0e93fd44065b20ab3
         with:
-            status: "Hello" # ${{ job.status }} # or a string such as `in-process`
+            status: "Sending" # ${{ job.status }} # or a string such as `in-process`
             channel: SLACK_CHANNEL
-            message: "#Triggered\n\nCLIENT-PAYLOAD"
+            message: "${{needs.determine-event.outputs.determine-event-result}}"
         if: always()  # <<<< ALWAYS RUN THIS STEP EVEN IF PREVIOUS STEPS FAILED
