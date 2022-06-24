@@ -23,7 +23,7 @@ jobs:
         run: |
           import os
           payload=os.environ['CLIENT_PAYLOAD']
-          print payload
+          print(payload)
           if payload.get('type', '') == 'url_verification':
             print(f"Returning Challenge value payload['challenge']...")
             result="success"
@@ -38,7 +38,7 @@ jobs:
       - name: slack - GitHub Actions Slack integration
         uses: act10ns/slack@46098c76608e7ab2e5c784a0e93fd44065b20ab3
         with:
-            status: "Sending" # ${{ job.status }} # or a string such as `in-process`
+            status: ${{needs.determine-event.outputs.determine-event-result}} # ${{ job.status }} # or a string such as `in-process`
             channel: SLACK_CHANNEL
-            message: "${{needs.determine-event.outputs.determine-event-result}}"
+            message: "Result: ${{needs.determine-event.outputs.determine-event-result}}"
         if: always()  # <<<< ALWAYS RUN THIS STEP EVEN IF PREVIOUS STEPS FAILED
