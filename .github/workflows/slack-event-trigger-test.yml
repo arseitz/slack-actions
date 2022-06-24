@@ -9,7 +9,8 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   SLACK_CHANNEL: "C03LF4N5WES"
   CLIENT-PAYLOAD: ${{ github.event.client_payload }}
-
+  PAYLOAD-CHALLENGE: ""
+  
 jobs:
   check-events:
     name: "Check Events"
@@ -22,11 +23,13 @@ jobs:
         run: |
           import os
           payload=os.environ['CLIENT_PAYLOAD']
+          print payload
           if payload.get('type', '') == 'url_verification':
-            print(f"Returning Challenge value...")
+            print(f"Returning Challenge value payload['challenge']...")
             result="success"
-            return payload['challenge']
-          result="failed"
+            os.environ['CLIENT_PAYLOAD']=payload['challenge']
+          print("no matching event")
+          result="failure"
         shell: python
   send-notification:
     name: "Send Slack Notification"
