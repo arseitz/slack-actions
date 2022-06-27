@@ -26,5 +26,5 @@ jobs:
         with:
             status: "Hello" # ${{ job.status }} # or a string such as `in-process`
             channel: SLACK_CHANNEL
-            message: ${{ CLIENT-PAYLOAD }}
+            message: "$CLIENT-PAYLOAD"
         if: always()  # <<<< ALWAYS RUN THIS STEP EVEN IF PREVIOUS STEPS FAILED
