@@ -7,6 +7,7 @@ on:
 
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  CLIENT-PAYLOAD: ${{ github.event.client_payload }}
   SLACK_CHANNEL: "C03LF4N5WES"
 
 jobs:
@@ -25,5 +26,5 @@ jobs:
         with:
             status: "Hello" # ${{ job.status }} # or a string such as `in-process`
             channel: SLACK_CHANNEL
-            message: "Hello World"
+            message: "Hello World\n$CLIENT-PAYLOAD"
         if: always()  # <<<< ALWAYS RUN THIS STEP EVEN IF PREVIOUS STEPS FAILED
