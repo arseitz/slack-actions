@@ -25,5 +25,5 @@ jobs:
         with:
             status: "Slacking..." # ${{ job.status }} # or a string such as `in-process`
             channel: SLACK_CHANNEL
-            message: ${{ toJson(github.event.sender) }}
+            message: ${{ toJson(github.event) }}
         if: always()  # <<<< ALWAYS RUN THIS STEP EVEN IF PREVIOUS STEPS FAILED
