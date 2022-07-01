@@ -7,7 +7,6 @@ on:
 
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  CLIENT-PAYLOAD: ${{ github.event.client_payload }}
   SLACK_CHANNEL: "C03LF4N5WES"
 
 jobs:
@@ -24,7 +23,7 @@ jobs:
       - name: slack - GitHub Actions Slack integration
         uses: act10ns/slack@46098c76608e7ab2e5c784a0e93fd44065b20ab3
         with:
-            status: "Hello" # ${{ job.status }} # or a string such as `in-process`
+            status: "Slacking..." # ${{ job.status }} # or a string such as `in-process`
             channel: SLACK_CHANNEL
-            message: "${{ env.CLIENT-PAYLOAD }}"
+            message: ${{ toJson(github.event.sender) }}
         if: always()  # <<<< ALWAYS RUN THIS STEP EVEN IF PREVIOUS STEPS FAILED
